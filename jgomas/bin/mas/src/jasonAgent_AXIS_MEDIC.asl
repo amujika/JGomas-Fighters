@@ -6,7 +6,7 @@ manager("Manager").
 // Team of troop.
 team("AXIS").
 // Type of troop.
-type("CLASS_SOLDIER").
+type("CLASS_MEDIC").
 
 // Value of "closeness" to the Flag, when patrolling in defense
 patrollingRadius(64).
@@ -27,8 +27,8 @@ patrollingRadius(64).
 *******************************/
 
 /////////////////////////////////
-//  GET AGENT TO AIM
-/////////////////////////////////
+//  GET AGENT TO AIM 
+/////////////////////////////////  
 /**
  * Calculates if there is an enemy at sight.
  *
@@ -38,13 +38,12 @@ patrollingRadius(64).
  * enemy found. Otherwise, the return value is aimed("false")
  *
  * <em> It's very useful to overload this plan. </em>
- * 
+ *
  */
 +!get_agent_to_aim
     <-  ?debug(Mode); if (Mode<=2) { .println("Looking for agents to aim."); }
         ?fovObjects(FOVObjects);
         .length(FOVObjects, Length);
-        
         ?debug(Mode); if (Mode<=1) { .println("El numero de objetos es:", Length); }
         
         if (Length > 0) {
@@ -84,7 +83,6 @@ patrollingRadius(64).
                 
             }
                      
-       
         }
 
      -bucle(_).
@@ -117,9 +115,8 @@ patrollingRadius(64).
  * is aiming.
  *
  *  It's very useful to overload this plan.
- * 
+ *
  */
-
 +!perform_aim_action
     <-  // Aimed agents have the following format:
         // [#, TEAM, TYPE, ANGLE, DISTANCE, HEALTH, POSITION ]
@@ -179,7 +176,7 @@ patrollingRadius(64).
 /////////////////////////////////
 /**  You can change initial priorities if you want to change the behaviour of each agent  **/
 +!setup_priorities
-    <-  +task_priority("TASK_NONE",0);
+    <-	+task_priority("TASK_NONE",0);
         +task_priority("TASK_GIVE_MEDICPAKS", 2000);
         +task_priority("TASK_GIVE_AMMOPAKS", 0);
         +task_priority("TASK_GIVE_BACKUP", 0);
@@ -241,6 +238,7 @@ patrollingRadius(64).
 
 
 
+
 /////////////////////////////////
 //  PERFORM_TRESHOLD_ACTION
 /////////////////////////////////
@@ -274,7 +272,7 @@ patrollingRadius(64).
        ?my_health_threshold(Ht);
        ?my_health(Hr);
        
-       if (Hr <= Ht) {  
+       if (Hr <= Ht) { 
           ?my_position(X, Y, Z);
           
          .my_team("medic_AXIS", E2);
@@ -289,7 +287,7 @@ patrollingRadius(64).
 //  ANSWER_ACTION_CFM_OR_CFA
 /////////////////////////////////
 
-   
+
     
 +cfm_agree[source(M)]
    <- ?debug(Mode); if (Mode<=1) { .println("YOUR CODE FOR cfm_agree GOES HERE.")};
