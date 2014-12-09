@@ -41,21 +41,18 @@ patrollingRadius(64).
  * 
  */
 +!get_agent_to_aim
-    <-  ?debug(Mode); if (Mode<=2) { .println("Looking for agents to aim."); }
-        ?fovObjects(FOVObjects);
+    <-  ?my_position(A, B, C);
+    	.println(A, " ", B," ", C);
+    	
+    	?fovObjects(FOVObjects);
         .length(FOVObjects, Length);
-        
-        ?debug(Mode); if (Mode<=1) { .println("El numero de objetos es:", Length); }
-        
+
         if (Length > 0) {
-		    +bucle(0);
-    
-            -+aimed("false");
+		    +bucle(0);    
+            -+aimed("false");            
     
             while (aimed("false") & bucle(X) & (X < Length)) {
-  
-                //.println("En el bucle, y X vale:", X);
-                
+               
                 .nth(X, FOVObjects, Object);
                 // Object structure 
                 // [#, TEAM, TYPE, ANGLE, DISTANCE, HEALTH, POSITION ]
@@ -75,18 +72,11 @@ patrollingRadius(64).
  					    ?debug(Mode); if (Mode<=2) { .println("Aiming an enemy. . .", MyTeam, " ", .number(MyTeam) , " ", Team, " ", .number(Team)); }
 					    +aimed_agent(Object);
                         -+aimed("true");
-
-                    }
-                    
-                }
-             
-                -+bucle(X+1);
-                
-            }
-                     
-       
+                    }                    
+                }             
+                -+bucle(X+1);                
+            }       
         }
-
      -bucle(_).
 
         
@@ -314,5 +304,6 @@ patrollingRadius(64).
 /////////////////////////////////
 
 +!init
-   <- ?debug(Mode); if (Mode<=1) { .println("YOUR CODE FOR init GOES HERE.")}.  
+   <- ?debug(Mode); if (Mode<=1) { .println("YOUR CODE FOR init GOES HERE.")}
+   !add_task(task("TASK_GET_OBJECTIVE", M, pos(20, 0, 20), "")).  
 
