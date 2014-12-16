@@ -6,6 +6,8 @@ manager("Manager").
 team("ALLIED").
 // Type of troop.
 type("CLASS_SOLDIER").
+objectivePackTaken(off).
+returnHome(0).
 
 { include("jgomas.asl") }
 { include("resources.asl") }
@@ -36,6 +38,10 @@ type("CLASS_SOLDIER").
 <- ?fovObjects(FOVObjects);
 .length(FOVObjects, Length);
 
+if (objectivePackTaken(on) & returnHome(RH) & (RH == 0)) {
+	!add_task(task(5000, "TASK_GOTO_POSITION", M, pos(155, 0, 133), ""));
+	-+returnHome(1);
+}
 if (Length > 0) {
     +bucle(0);    
     -+aimed("false");
