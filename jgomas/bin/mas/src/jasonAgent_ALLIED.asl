@@ -1,5 +1,4 @@
 debug(3).
-
 // Name of the manager
 manager("Manager").
 
@@ -8,17 +7,10 @@ team("ALLIED").
 // Type of troop.
 type("CLASS_SOLDIER").
 
-
-
-
-
 { include("jgomas.asl") }
-
-
-
+{ include("resources.asl") }
 
 // Plans
-
 
 /*******************************
 *
@@ -41,28 +33,18 @@ type("CLASS_SOLDIER").
 * 
 */  
 +!get_agent_to_aim
-<-  ?debug(Mode); if (Mode<=2) { .println("Looking for agents to aim."); }
-?fovObjects(FOVObjects);
+<- ?fovObjects(FOVObjects);
 .length(FOVObjects, Length);
 
-?debug(Mode); if (Mode<=1) { .println("El numero de objetos es:", Length); }
-
 if (Length > 0) {
-    +bucle(0);
-    
+    +bucle(0);    
     -+aimed("false");
     
     while (aimed("false") & bucle(X) & (X < Length)) {
-        
-        //.println("En el bucle, y X vale:", X);
-        
         .nth(X, FOVObjects, Object);
-        // Object structure
         // [#, TEAM, TYPE, ANGLE, DISTANCE, HEALTH, POSITION ]
         .nth(2, Object, Type);
-        
-        ?debug(Mode); if (Mode<=2) { .println("Objeto Analizado: ", Object); }
-        
+                
         if (Type > 1000) {
             ?debug(Mode); if (Mode<=2) { .println("I found some object."); }
         } else {
@@ -70,21 +52,13 @@ if (Length > 0) {
             .nth(1, Object, Team);
             ?my_formattedTeam(MyTeam);
             
-            if (Team == 200) {  // Only if I'm ALLIED
-				
-                ?debug(Mode); if (Mode<=2) { .println("Aiming an enemy. . .", MyTeam, " ", .number(MyTeam) , " ", Team, " ", .number(Team)); }
+            if (not (Team == MyTeam)) {				
                 +aimed_agent(Object);
                 -+aimed("true");
-                
             }
-            
         }
-        
         -+bucle(X+1);
-        
     }
-    
-    
 }
 
 -bucle(_).
@@ -126,14 +100,10 @@ if (Length > 0) {
         ?debug(Mode); if (Mode<=2) { .println("BAJO EL PUNTO DE MIRA TENGO A ALGUIEN DEL EQUIPO ", AimedAgentTeam);             }
         ?my_formattedTeam(MyTeam);
 
-
-        if (AimedAgentTeam == 200) {
-    
-                .nth(6, AimedAgent, NewDestination);
-                ?debug(Mode); if (Mode<=1) { .println("NUEVO DESTINO DEBERIA SER: ", NewDestination); }
-          
-            }
- .
+        if (AimedAgentTeam == 200) {    
+                .nth(6, AimedAgent, NewDestination);        
+        }
+.
 
 /**
 * Action to do when the agent is looking at.
@@ -314,7 +284,22 @@ if (Length > 0) {
 /////////////////////////////////
 
 +!init
-   <- ?debug(Mode); if (Mode<=1) { .println("YOUR CODE FOR init GOES HERE.")}.  
+   <- ?my_position(X, Y, Z);
+   
+   !fw_distance(pos(X, Y, Z), pos(155, 0, 100));
+   ?fw_distance(D1);
+   !fw_distance(pos(X, Y, Z), pos(155, 0, 133));
+   ?fw_distance(D2);
+
+   if(D1 > D2) {
+   		!add_task(task(5000, "TASK_GOTO_POSITION", M, pos(155, 0, 133), ""));
+   } else {
+   		!add_task(task(5000, "TASK_GOTO_POSITION", M, pos(155, 0, 100), ""));
+   }
+   
+   
+   
+   .  
 
 
 

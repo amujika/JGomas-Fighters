@@ -41,10 +41,7 @@ patrollingRadius(64).
  * 
  */
 +!get_agent_to_aim
-    <-  ?my_position(A, B, C);
-    	.println(A, " ", B," ", C);
-    	
-    	?fovObjects(FOVObjects);
+    <-  ?fovObjects(FOVObjects);
         .length(FOVObjects, Length);
 
         if (Length > 0) {
@@ -305,5 +302,5 @@ patrollingRadius(64).
 
 +!init
    <- ?debug(Mode); if (Mode<=1) { .println("YOUR CODE FOR init GOES HERE.")}
-   !add_task(task("TASK_GET_OBJECTIVE", M, pos(20, 0, 20), "")).  
+   .  
 
