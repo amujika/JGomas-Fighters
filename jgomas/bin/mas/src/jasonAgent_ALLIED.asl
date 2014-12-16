@@ -58,9 +58,8 @@ if (Length > 0) {
             .nth(1, Object, Team);
             ?my_formattedTeam(MyTeam);
             
-            if (not (Team == MyTeam)) {				
-                +aimed_agent(Object);
-                -+aimed("true");
+            if (not (Team == MyTeam) | (Team == MyTeam)) {
+            	
             }
         }
         -+bucle(X+1);

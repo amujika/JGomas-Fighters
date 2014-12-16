@@ -10,11 +10,12 @@ type("CLASS_SOLDIER").
 
 // Value of "closeness" to the Flag, when patrolling in defense
 patrollingRadius(64).
-
+priority(5000).
 
 
 
 { include("jgomas.asl") }
+{ include("resources.asl")}
 
 
 // Plans
@@ -62,13 +63,19 @@ patrollingRadius(64).
                 } else {
                     // Object may be an enemy
                     .nth(1, Object, Team);
-                    ?my_formattedTeam(MyTeam);
-          
+ 
                     if (Team == 100) {  // Only if I'm AXIS
-				
- 					    ?debug(Mode); if (Mode<=2) { .println("Aiming an enemy. . .", MyTeam, " ", .number(MyTeam) , " ", Team, " ", .number(Team)); }
-					    +aimed_agent(Object);
-                        -+aimed("true");
+						.nth(6, Object, POS);
+            			!follow(POS, 5 );
+            			?destinoX(POSX);
+            			?destinoZ(POSZ);
+            			?priority(P);
+            			!add_task(task(P, "TASK_GOTO_POSITION", "Manager", pos(POSX, 0, POSZ), ""));
+            			-+priority(P+1);	
+            			?current_task(Task);
+            			.println("I found some object.", Task);			
+               			+aimed_agent(Object);
+               			//-+aimed("true");
                     }                    
                 }             
                 -+bucle(X+1);                
