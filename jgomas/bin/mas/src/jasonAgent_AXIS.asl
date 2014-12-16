@@ -47,7 +47,7 @@ priority(5000).
 
         if (Length > 0) {
 		    +bucle(0);    
-            -+aimed("false");            
+            //-+aimed("false");            
     
             while (aimed("false") & bucle(X) & (X < Length)) {
                
@@ -65,17 +65,9 @@ priority(5000).
                     .nth(1, Object, Team);
  
                     if (Team == 100) {  // Only if I'm AXIS
-						.nth(6, Object, POS);
-            			!follow(POS, 5 );
-            			?destinoX(POSX);
-            			?destinoZ(POSZ);
-            			?priority(P);
-            			!add_task(task(P, "TASK_GOTO_POSITION", "Manager", pos(POSX, 0, POSZ), ""));
-            			-+priority(P+1);	
-            			?current_task(Task);
-            			.println("I found some object.", Task);			
+						.nth(6, Object, POS);		
                			+aimed_agent(Object);
-               			//-+aimed("true");
+               			-+aimed("true");
                     }                    
                 }             
                 -+bucle(X+1);                
@@ -118,17 +110,16 @@ priority(5000).
     <-  // Aimed agents have the following format:
         // [#, TEAM, TYPE, ANGLE, DISTANCE, HEALTH, POSITION ]
         ?aimed_agent(AimedAgent);
-        ?debug(Mode); if (Mode<=1) { .println("AimedAgent ", AimedAgent); }
         .nth(1, AimedAgent, AimedAgentTeam);
-        ?debug(Mode); if (Mode<=2) { .println("BAJO EL PUNTO DE MIRA TENGO A ALGUIEN DEL EQUIPO ", AimedAgentTeam); }
         ?my_formattedTeam(MyTeam);
 
 
-        if (AimedAgentTeam == 100) {
-        
+        if (AimedAgentTeam == 100) {        
             .nth(6, AimedAgent, NewDestination);
-            ?debug(Mode); if (Mode<=1) { .println("NUEVO DESTINO MARCADO: ", NewDestination); }
-            //update_destination(NewDestination);
+            ?priority(P);
+			!add_task(task(P, "TASK_GOTO_POSITION", "Manager", NewDestination, ""));
+			-+state(standing);            			
+            -+priority(P+1);	
         }
         .
     

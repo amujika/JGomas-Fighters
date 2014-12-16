@@ -58,8 +58,8 @@ if (Length > 0) {
             .nth(1, Object, Team);
             ?my_formattedTeam(MyTeam);
             
-            if (not (Team == MyTeam) | (Team == MyTeam)) {
-            	
+            if (Team == 200) {
+            	//Your aiming code goes here
             }
         }
         -+bucle(X+1);
