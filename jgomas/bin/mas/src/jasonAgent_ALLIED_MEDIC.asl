@@ -7,12 +7,11 @@ manager("Manager").
 team("ALLIED").
 // Type of troop.
 type("CLASS_MEDIC").
-
-
-
+objectivePackTaken(off).
+returnHome(0).
 
 { include("jgomas.asl") }
-
+{ include("resources.asl") }
 
 
 
@@ -46,6 +45,11 @@ type("CLASS_MEDIC").
 
 ?debug(Mode); if (Mode<=1) { .println("El numero de objetos es:", Length); }
 
+if (objectivePackTaken(on) & returnHome(RH) & (RH == 0)) {
+	!add_task(task(5000, "TASK_GOTO_POSITION", M, pos(155, 0, 133), ""));
+	-+task_priority("TASK_GIVE_MEDICPAKS", 0);
+	-+returnHome(1);
+}
 if (Length > 0) {
     +bucle(0);
     
@@ -309,5 +313,17 @@ if (Length > 0) {
 /////////////////////////////////
 
 +!init
-   <- ?debug(Mode); if (Mode<=1) { .println("YOUR CODE FOR init GOES HERE.")}.  
+   <- ?my_position(X, Y, Z);
+   
+   !fw_distance(pos(X, Y, Z), pos(155, 0, 100));
+   ?fw_distance(D1);
+   !fw_distance(pos(X, Y, Z), pos(155, 0, 133));
+   ?fw_distance(D2);
+
+   if(D1 > D2) {
+   		!add_task(task(5000, "TASK_GOTO_POSITION", M, pos(155, 0, 133), ""));
+   } else {
+   		!add_task(task(5000, "TASK_GOTO_POSITION", M, pos(155, 0, 100), ""));
+   }
+.
 
