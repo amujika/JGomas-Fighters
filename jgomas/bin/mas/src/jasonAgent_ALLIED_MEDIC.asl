@@ -44,6 +44,7 @@ priority(5000).
 	!add_task(task(P, "TASK_GOTO_POSITION", "Manager", pos(X, Y, Z), ""));
 	-+state(standing);            			
     -+priority(P+1);
+    create_medic_pack;
  .
  
 +!get_agent_to_aim
@@ -59,7 +60,6 @@ priority(5000).
 		?my_position(X, Y, Z);
           
      	.my_team("medic_ALLIED", E2);
-     	.println("Mi equipo medico: ", E2 );
      	.concat("followFlag(",X, ", ", Y, ", ", Z, ")", Content2);
      	.send_msg_with_conversation_id(E2, tell, Content2, "FLAG");
 	}
