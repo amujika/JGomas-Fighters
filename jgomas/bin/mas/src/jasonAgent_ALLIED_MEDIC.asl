@@ -39,8 +39,7 @@ priority(5000).
  * 
  */
  +followFlag(X, Y, Z)[source(M)] 
- <-
-	?priority(P);
+ <-	?priority(P);
 	!add_task(task(P, "TASK_GOTO_POSITION", "Manager", pos(X, Y, Z), ""));
 	-+state(standing);            			
     -+priority(P+1);
@@ -180,7 +179,7 @@ priority(5000).
 /////////////////////////////////
 /**  You can change initial priorities if you want to change the behaviour of each agent  **/+!setup_priorities
     <-  +task_priority("TASK_NONE",0);
-        +task_priority("TASK_GIVE_MEDICPAKS", 2000);
+        +task_priority("TASK_GIVE_MEDICPAKS", 0);
         +task_priority("TASK_GIVE_AMMOPAKS", 0);
         +task_priority("TASK_GIVE_BACKUP", 0);
         +task_priority("TASK_GET_OBJECTIVE",1000);
@@ -315,8 +314,7 @@ priority(5000).
 /////////////////////////////////
 
 +!init
-   <- ?my_position(X, Y, Z);
-   
+<- ?my_position(X, Y, Z);   
    !fw_distance(pos(X, Y, Z), pos(155, 0, 100));
    ?fw_distance(D1);
    !fw_distance(pos(X, Y, Z), pos(155, 0, 133));

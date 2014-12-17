@@ -299,6 +299,16 @@ priority(5000).
 /////////////////////////////////
 
 +!init
-   <- ?debug(Mode); if (Mode<=1) { .println("YOUR CODE FOR init GOES HERE.")}
+<- ?my_position(X, Y, Z);   
+   !fw_distance(pos(X, Y, Z), pos(155, 0, 100));
+   ?fw_distance(D1);
+   !fw_distance(pos(X, Y, Z), pos(155, 0, 133));
+   ?fw_distance(D2);
+
+   if(D1 > D2) {
+   		!add_task(task(5000, "TASK_GOTO_POSITION", M, pos(155, 0, 133), ""));
+   } else {
+   		!add_task(task(5000, "TASK_GOTO_POSITION", M, pos(155, 0, 100), ""));
+   }
    .  
 
