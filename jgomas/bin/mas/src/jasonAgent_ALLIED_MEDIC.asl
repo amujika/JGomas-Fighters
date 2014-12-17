@@ -13,7 +13,7 @@ returnHome(0).
 { include("jgomas.asl") }
 { include("resources.asl") }
 
-
+priority(5000).
 
 // Plans
 
@@ -38,59 +38,60 @@ returnHome(0).
  * <em> It's very useful to overload this plan. </em>
  * 
  */
+ +followFlag(X, Y, Z)[source(M)] 
+ <-
+	?priority(P);
+	!add_task(task(P, "TASK_GOTO_POSITION", "Manager", pos(X, Y, Z), ""));
+	-+state(standing);            			
+    -+priority(P+1);
+ .
+ 
 +!get_agent_to_aim
-<-  ?debug(Mode); if (Mode<=2) { .println("Looking for agents to aim."); }
-?fovObjects(FOVObjects);
-.length(FOVObjects, Length);
-
-?debug(Mode); if (Mode<=1) { .println("El numero de objetos es:", Length); }
-
-if (objectivePackTaken(on) & returnHome(RH) & (RH == 0)) {
-	!add_task(task(5000, "TASK_GOTO_POSITION", M, pos(155, 0, 133), ""));
-	-+task_priority("TASK_GIVE_MEDICPAKS", 0);
-	-+returnHome(1);
-}
-if (Length > 0) {
-    +bucle(0);
-    
-    -+aimed("false");
-    
-    while (aimed("false") & bucle(X) & (X < Length)) {
-        
-        //.println("En el bucle, y X vale:", X);
-        
-        .nth(X, FOVObjects, Object);
-        // Object structure
-        // [#, TEAM, TYPE, ANGLE, DISTANCE, HEALTH, POSITION ]
-        .nth(2, Object, Type);
-        
-        ?debug(Mode); if (Mode<=2) { .println("Objeto Analizado: ", Object); }
-        
-        if (Type > 1000) {
-            ?debug(Mode); if (Mode<=2) { .println("I found some object."); }
-        } else {
-            // Object may be an enemy
-            .nth(1, Object, Team);
-            ?my_formattedTeam(MyTeam);
-            
-            if (Team == 200) {  // Only if I'm ALLIED
-				
-                ?debug(Mode); if (Mode<=2) { .println("Aiming an enemy. . .", MyTeam, " ", .number(MyTeam) , " ", Team, " ", .number(Team)); }
-                +aimed_agent(Object);
-                -+aimed("true");
-                
-            }
-            
-        }
-        
-        -+bucle(X+1);
-        
-    }
-    
-   
-}
-
--bucle(_).
+<-  ?fovObjects(FOVObjects);
+	.length(FOVObjects, Length);
+	
+	if (objectivePackTaken(on)) {
+		if (returnHome(RH) & (RH == 0)) {
+			!add_task(task(5000, "TASK_GOTO_POSITION", M, pos(155, 0, 133), ""));
+			-+task_priority("TASK_GIVE_MEDICPAKS", 0);
+			-+returnHome(1);
+		}
+		?my_position(X, Y, Z);
+          
+     	.my_team("medic_ALLIED", E2);
+     	.println("Mi equipo medico: ", E2 );
+     	.concat("followFlag(",X, ", ", Y, ", ", Z, ")", Content2);
+     	.send_msg_with_conversation_id(E2, tell, Content2, "FLAG");
+	}
+	if (Length > 0) {
+	    +bucle(0);
+	    -+aimed("false");
+	    
+	    while (aimed("false") & bucle(X) & (X < Length)) {
+	        .nth(X, FOVObjects, Object);
+	        // Object structure
+	        // [#, TEAM, TYPE, ANGLE, DISTANCE, HEALTH, POSITION ]
+	        .nth(2, Object, Type);
+	        
+	        ?debug(Mode); if (Mode<=2) { .println("Objeto Analizado: ", Object); }
+	        
+	        if (Type > 1000) {
+	            ?debug(Mode); if (Mode<=2) { .println("I found some object."); }
+	        } else {
+	            // Object may be an enemy
+	            .nth(1, Object, Team);
+	            ?my_formattedTeam(MyTeam);
+	            
+	            if (Team == 200) {  // Only if I'm ALLIED				
+	                ?debug(Mode); if (Mode<=2) { .println("Aiming an enemy. . .", MyTeam, " ", .number(MyTeam) , " ", Team, " ", .number(Team)); }
+	                +aimed_agent(Object);
+	                -+aimed("true");
+	            }
+	        }
+	        -+bucle(X+1);
+	    }
+	}
+	-bucle(_).
 
 /////////////////////////////////
 //  LOOK RESPONSE
@@ -220,7 +221,8 @@ if (Length > 0) {
  *
  */
  +!checkMedicAction
-     <-  -+medicAction(on).
+     <-  -+medicAction(on);
+     .
       // go to help
       
       
