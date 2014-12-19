@@ -9,7 +9,7 @@ team("AXIS").
 type("CLASS_SOLDIER").
 
 // Value of "closeness" to the Flag, when patrolling in defense
-patrollingRadius(20).
+patrollingRadius(15).
 priority(5000).
 
 
@@ -304,11 +304,12 @@ priority(5000).
    ?fw_distance(D1);
    !fw_distance(pos(X, Y, Z), pos(108, 0, 133));
    ?fw_distance(D2);
-
+.random(AA);
+.println(AA);
    if(D1 > D2) {
-   		!add_task(task(5000, "TASK_GOTO_POSITION", M, pos(108, 0, 133), ""));
+   		!add_task(task(5000, "TASK_GOTO_POSITION", M, pos(108, 0, 133 + AA*15), ""));
    } else {
-   		!add_task(task(5000, "TASK_GOTO_POSITION", M, pos(108, 0, 100), ""));
+   		!add_task(task(5000, "TASK_GOTO_POSITION", M, pos(108, 0, 100 - AA*15), ""));
    }
    .  
 
