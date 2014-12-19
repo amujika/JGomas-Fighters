@@ -9,7 +9,7 @@ team("AXIS").
 type("CLASS_SOLDIER").
 
 // Value of "closeness" to the Flag, when patrolling in defense
-patrollingRadius(64).
+patrollingRadius(20).
 priority(5000).
 
 
@@ -58,8 +58,8 @@ priority(5000).
                 
                 ?debug(Mode); if (Mode<=2) { .println("Objeto Analizado: ", Object); }
                 
-                if (Type > 1000) {
-                    ?debug(Mode); if (Mode<=2) { .println("I found some object."); }
+                if (Type > 1000) {                	
+                     if (Type == 1003) {.println("I found some object:", Type); }
                 } else {
                     // Object may be an enemy
                     .nth(1, Object, Team);
@@ -300,15 +300,15 @@ priority(5000).
 
 +!init
 <- ?my_position(X, Y, Z);   
-   !fw_distance(pos(X, Y, Z), pos(155, 0, 100));
+   !fw_distance(pos(X, Y, Z), pos(108, 0, 100));
    ?fw_distance(D1);
-   !fw_distance(pos(X, Y, Z), pos(155, 0, 133));
+   !fw_distance(pos(X, Y, Z), pos(108, 0, 133));
    ?fw_distance(D2);
 
    if(D1 > D2) {
-   		!add_task(task(5000, "TASK_GOTO_POSITION", M, pos(155, 0, 133), ""));
+   		!add_task(task(5000, "TASK_GOTO_POSITION", M, pos(108, 0, 133), ""));
    } else {
-   		!add_task(task(5000, "TASK_GOTO_POSITION", M, pos(155, 0, 100), ""));
+   		!add_task(task(5000, "TASK_GOTO_POSITION", M, pos(108, 0, 100), ""));
    }
    .  
 
